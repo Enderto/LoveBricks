@@ -1,5 +1,4 @@
 require "lib/class"
-vector = require("lib/vector")
 
 
 function love.load()
@@ -43,15 +42,19 @@ function love.load()
             end
         end
     end
+    
+    p={x=10,y=600}
 
     r = Rect(100 ,100)
+    
 end
 
 function love.update()
     d = Dog()
-
-
     
+
+    mx, my = love.mouse.getPosition( )
+    p.x = mx-120
 end
 
 function love.draw()
@@ -65,10 +68,11 @@ function love.draw()
             if(b ~= nil) then
                 b:draw()
             end
-                
+
         end
     end
 
+    love.graphics.rectangle( "fill", p.x, p.y, 240, 40)
 
 end
 
