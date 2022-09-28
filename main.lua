@@ -1,32 +1,17 @@
 require "lib/class"
-
+require "class/brick"
 
 function love.load()
-    SIZE = 10;
-    Dog = class()
-    function Dog:bark()
-        love.graphics.print "woof!"
-    end
-    function Dog:pbark()
-        print("bark")
-    end
+    cursor = love.graphics.newImage("img/cursor.png") 
 
-    Rect = class()
-    function Rect:init(x,y)
-        self.x = x
-        self.y = y
-    end
-    function Rect:draw()
-        love.graphics.rectangle( "fill", self.x+10, self.y, 60, 30)
-    end
-
+    love.mouse.setVisible(false)
     wall=  {
-        {0,1,1,0,2,1,0,2,1,2},
-        {1,0,0,2,0,2,0,2,2,1}
+        {0,1,1,0,2,1,0,2,1,2,1},
+        {1,0,0,2,0,2,0,2,2,1,0}
     };
-
+    SIZE = table.maxn(wall[1]);
     brickList = {{},{}}
-
+--marche pas pour y agandisement car insert fait pour 2 y
 	for i=1,2 do
         for j=1,SIZE do
             if(wall[i][j]>0)
@@ -50,7 +35,6 @@ function love.load()
 end
 
 function love.update()
-    d = Dog()
     
 
     mx, my = love.mouse.getPosition( )
@@ -58,11 +42,10 @@ function love.update()
 end
 
 function love.draw()
-    d:bark()
     love.graphics.print("bob",100)
     
     for k=1,2 do
-        for l=1,10 do
+        for l=1,SIZE do
             local b = brickList[k][l]
             --b:draw()
             if(b ~= nil) then
@@ -73,7 +56,7 @@ function love.draw()
     end
 
     love.graphics.rectangle( "fill", p.x, p.y, 240, 40)
-
+    love.graphics.draw(cursor, mx, my,0, 0.05, 0.05)
 end
 
 
