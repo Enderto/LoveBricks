@@ -9,7 +9,7 @@ function love.load()
 
     --table with brick organisation
     wall=  {
-        {0,1,1,0,2,1,0,2,1,2,1},
+        {1,1,1,0,2,1,0,2,1,2,1},
         {1,0,0,2,0,2,0,2,2,1,0}
     };
     --size of the line
@@ -40,14 +40,27 @@ end
 
 function love.update()
     
-
     mx, my = love.mouse.getPosition( )
     p.x = mx-120
     b:update()
+    
+    b:colision(brickList)
+
+    --debug = brickList[1][1].x
+
 end
+function love.keypressed(key, scancode, isrepeat)
+    if key == "escape" then
+       love.event.quit()
+    end
+    if key == "a" then
+        brickList[1][1] = nil
+    end
+     
+ end
 
 function love.draw()
-    love.graphics.print("bob",100)
+    love.graphics.print(debug,0)
     
     for k=1,2 do
         for l=1,SIZE do

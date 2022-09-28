@@ -1,6 +1,10 @@
 require "../lib/class"
 
 Rect = class()
+    Rect:set{
+        x=0,
+        y=0,
+    }
     function Rect:init(x,y)
         self.x = x
         self.y = y
