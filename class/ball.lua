@@ -40,21 +40,52 @@ Ball = class()
             self.vspeed.x = -(self.vspeed.x)
         end
     end
-    function Ball:colision(tablecol)
+    function Ball:colision(tablecol) --colision with bricks
+        --the colision is cut in 3 part to better manage bounce
         for i=1,2 do
             for j=1,SIZE do
+                --colision left
                 if(not(tablecol[i][j] == nil)) then
-                    if((self.x+self.r>tablecol[i][j].x and self.x+self.r<(tablecol[i][j].x)+60) and (self.y+self.r>tablecol[i][j].y and self.y+self.r<(tablecol[i][j].y)+30))then
+                    if(((self.x+self.vspeed.x)+self.r>=tablecol[i][j].x and (self.x+self.vspeed.x)+self.r<=(tablecol[i][j].x)) and
+                     ((self.y+self.vspeed.y)+self.r>=tablecol[i][j].y-1 and ((self.y+self.vspeed.y)+self.r<=(tablecol[i][j].y)+31)))then
                         self:bounce(1)
                         tablecol[i][j]=nil
                     end
                 end
+                --colision right
                 if(not(tablecol[i][j] == nil)) then
-                    if((self.x+self.r>tablecol[i][j].x+10 and self.x+self.r<(tablecol[i][j].x)+40) and (self.y+self.r>tablecol[i][j].y and self.y+self.r<(tablecol[i][j].y)+30))then
+                    if(((self.x+self.vspeed.x)+self.r>=tablecol[i][j].x+50 and (self.x+self.vspeed.x)+self.r<=(tablecol[i][j].x)+60) and
+                     ((self.y+self.vspeed.y)+self.r>=tablecol[i][j].y-1 and ((self.y+self.vspeed.y)+self.r<=(tablecol[i][j].y)+31)))then
+                        self:bounce(1)
+                        tablecol[i][j]=nil
+                    end
+                end
+                --colision center
+                if(not(tablecol[i][j] == nil)) then
+                    if(((self.x+self.vspeed.x)+self.r>=tablecol[i][j].x and (self.x+self.vspeed.x)+self.r<=(tablecol[i][j].x)+60) and
+                     ((self.y+self.vspeed.y)+self.r>=tablecol[i][j].y-1 and ((self.y+self.vspeed.y)+self.r<=(tablecol[i][j].y)+31)))then
                         self:bounce(2)
                         tablecol[i][j]=nil
                     end
                 end
             end
+        end
+    end
+
+    function Ball:colisionBody(body,maxX,maxY) --colision with a rectangle other thant brick (for exemple the player)
+        --the colision is cut in 3 part to better manage bounce
+        if(((self.x+self.vspeed.x)+self.r>=body.x and (self.x+self.vspeed.x)+self.r<=(body.x)+1) and
+            ((self.y+self.vspeed.y)+self.r>=body.y and (self.y+self.vspeed.y)+self.r<=(body.y)+maxY))then
+            self:bounce(1)
+        end
+    --colision right
+        if(((self.x+self.vspeed.x)+self.r>=body.x+maxX-10 and (self.x+self.vspeed.x)+self.r<=(body.x)+maxX+1) and
+            ((self.y+self.vspeed.y)+self.r>=body.y and ((self.y+self.vspeed.y)+self.r<=(body.y)+maxY)))then
+            self:bounce(1)
+        end
+    --colision center
+        if(((self.x+self.vspeed.x)+self.r>=body.x and (self.x+self.vspeed.x)+self.r<=(body.x)+maxX+1) and
+            ((self.y+self.vspeed.y)+self.r>=body.y and ((self.y+self.vspeed.y)+self.r<=(body.y)+maxY)))then
+            self:bounce(2)
         end
     end

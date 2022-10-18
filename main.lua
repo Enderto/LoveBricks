@@ -9,12 +9,14 @@ function love.load()
 
     --table with brick organisation
     wall=  {
-        {1,1,1,0,2,1,0,2,1,2,1},
-        {1,0,0,2,0,2,0,2,2,1,0}
+        {1,1,1,0,2,1,0,2,1,2,1,1,1,1,1},
+        {1,0,0,2,0,2,0,2,2,1,0,1,1,1,1}
     };
     --size of the line
     SIZE = #wall[1];
     brickList = {{},{}}
+
+    ballList = {}
 --marche pas pour y agandisement car insert fait pour 2 y
 	for i=1,2 do
         for j=1,SIZE do
@@ -22,11 +24,11 @@ function love.load()
             then
                 if(wall[i][j]==1)
                 then
-                    table.insert(brickList[i],j,Rect((70*j),50*(i+1%10)))
+                    table.insert(brickList[i],j,Rect((70*j),50*(i+1%5)))
                 end
                 if(wall[i][j]==2)
                 then
-                    table.insert(brickList[i],j,Rect((70*j),50*(i+1%10)))
+                    table.insert(brickList[i],j,Rect((70*j),50*(i+1%5)))
                 end
             end
         end
@@ -36,6 +38,11 @@ function love.load()
 
     r = Rect(100 ,100)
     b = Ball(100,100,10)
+    test = 0
+
+    for u=1,2 do
+        table.insert(ballList,Ball(100,100*(u+1%5),10))
+    end
 end
 
 function love.update()
@@ -46,8 +53,17 @@ function love.update()
     
     b:colision(brickList)
 
-    --debug = brickList[1][1].x
+    b:colisionBody(p,240,40)
 
+    
+    
+    for k,v in pairs(ballList) do
+        v:update()
+        v:colision(brickList)
+        v:colisionBody(p,240,40)
+    end
+
+    --debug = brickList[1][1].x
 end
 function love.keypressed(key, scancode, isrepeat)
     if key == "escape" then
@@ -60,7 +76,7 @@ function love.keypressed(key, scancode, isrepeat)
  end
 
 function love.draw()
-    love.graphics.print(debug,0)
+    love.graphics.print(test,0)
     
     for k=1,2 do
         for l=1,SIZE do
@@ -72,8 +88,13 @@ function love.draw()
         end
     end
     b:draw()
+    for k,v in pairs(ballList) do
+        v:draw()
+    end
     love.graphics.rectangle( "fill", p.x, p.y, 240, 40)
     love.graphics.draw(cursor, mx, my,0, 0.05, 0.05)
+
+    
 end
 
 
